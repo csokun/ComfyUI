@@ -7,7 +7,7 @@ services:
       - "8188:8188"
     volumes:
       - ./models:/app/models
-      - ./models:/app/custom_nodes
+      - ./custom_nodes:/app/custom_nodes
     tty: true
     deploy:
       resources:
