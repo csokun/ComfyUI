@@ -1,0 +1,18 @@
+services:
+  app:
+    build: .
+    image: comfyui
+    restart: unless-stopped
+    ports:
+      - "8188:8188"
+    volumes:
+      - ./models:/app/models
+      - ./models:/app/custom_nodes
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
+              capabilities: [compute, utility, gpu]
