@@ -1,0 +1,19 @@
+# ComfyUI-Manager
+GitPython
+PyGithub
+matrix-client==0.4.0
+transformers
+huggingface-hub>0.20
+typer
+rich
+typing-extensions
+
+# IPAdapter
+insightface>=0.7.3
+onnx>=1.16.1
+onnxruntime>=1.18.0
+
+# Reactor
+numpy
+segment_anything
+opencv-python>=4.7.0.72
