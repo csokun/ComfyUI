@@ -16,9 +16,12 @@ RUN --mount=type=cache,target=/root/.cache \
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY requirements.txt requirements_docker.txt ./
 RUN --mount=type=cache,target=/root/.cache \
-	pip install -r requirements.txt
+	pip install -r requirements_docker.txt -r requirements.txt
+
+RUN --mount=type=cache,target=/root/.cache \
+	pip install onnxruntime-gpu --extra-index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/
 
 COPY . .
 
