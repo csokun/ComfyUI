@@ -8,6 +8,11 @@ typer
 rich
 typing-extensions
 
+# Impact Pack
+piexif
+opencv-python-headless
+scipy>=1.11.4
+
 # IPAdapter
 insightface>=0.7.3
 onnx>=1.16.1
@@ -17,3 +22,17 @@ onnxruntime>=1.18.0
 numpy
 segment_anything
 opencv-python>=4.7.0.72
+
+# ComfyUI-essential
+numba
+colour-science
+rembg
+pixeloe
+
+# Segment segment
+timm
+addict
+yapf
+
+# impact pack
+ultralytics>=8.2.32

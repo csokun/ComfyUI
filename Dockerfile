@@ -11,8 +11,11 @@ RUN apt-get install -y curl wget libgl1 libglib2.0-0 python3-pip python-is-pytho
 # perftools
 RUN apt-get update && apt-get install --no-install-recommends -y google-perftools
 
+RUN apt-get install -y libcudnn8
+
 RUN --mount=type=cache,target=/root/.cache \
-    pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
+    # pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
+	pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu124
 
 WORKDIR /app
 
@@ -25,4 +28,4 @@ RUN --mount=type=cache,target=/root/.cache \
 
 COPY . .
 
-CMD ["python", "main.py", "--listen"]
+CMD ["python", "main.py", "--listen", "--lowvram"]
