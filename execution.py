@@ -179,7 +179,7 @@ def recursive_execute(server, prompt, outputs, current_item, extra_data, execute
 
         logging.error(f"!!! Exception during processing!!! {ex}")
         logging.error(traceback.format_exc())
-
+                
         error_details = {
             "node_id": unique_id,
             "exception_message": str(ex),

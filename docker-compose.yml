@@ -5,6 +5,8 @@ services:
     restart: unless-stopped
     ports:
       - "8188:8188"
+    # environment:
+      # - CUDA_LAUNCH_BLOCKING=1
     volumes:
       - ./models:/app/models
       - ./custom_nodes:/app/custom_nodes
