@@ -26,7 +26,7 @@ opencv-python>=4.7.0.72
 # ComfyUI-essential
 numba
 colour-science
-rembg
+rembg>=2.0.57
 pixeloe
 
 # Segment segment
@@ -36,3 +36,6 @@ yapf
 
 # impact pack
 ultralytics>=8.2.32
+
+# Yolo-ESAM
+inference-gpu[yolo-world]==0.9.15
