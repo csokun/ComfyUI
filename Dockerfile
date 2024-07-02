@@ -16,7 +16,6 @@ RUN apt-get install -y libcudnn8
 RUN apt-get install libgl1-mesa-glx -y
 
 RUN --mount=type=cache,target=/root/.cache \
-    # pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
 	pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu124
 
 WORKDIR /app
@@ -26,6 +25,7 @@ RUN --mount=type=cache,target=/root/.cache \
 	pip install -r requirements_docker.txt -r requirements.txt
 
 RUN --mount=type=cache,target=/root/.cache \
+	pip uninstall -y onnxruntime onnxruntime-gpu && \
 	pip install onnxruntime-gpu --extra-index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/
 
 COPY . .
