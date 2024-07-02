@@ -6,8 +6,10 @@ services:
     ports:
       - "8188:8188"
     # environment:
-      # - CUDA_LAUNCH_BLOCKING=1
+    # - CUDA_LAUNCH_BLOCKING=1
     volumes:
+      - ./input:/app/input
+      - ./output:/app/output
       - ./models:/app/models
       - ./custom_nodes:/app/custom_nodes
     tty: true

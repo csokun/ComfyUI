@@ -40,3 +40,8 @@ ultralytics>=8.2.32
 # Yolo-ESAM
 supervision
 inference-gpu[yolo-world]==0.9.15
+trimesh[easy]
+
+# inspire pack
+matplotlib
+cachetools
