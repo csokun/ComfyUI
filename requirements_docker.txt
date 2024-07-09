@@ -45,3 +45,10 @@ trimesh[easy]
 # inspire pack
 matplotlib
 cachetools
+
+# controlnet_aux
+yacs
+mediapipe
+svglib
+
+imageio-ffmpeg
