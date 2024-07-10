@@ -3,6 +3,7 @@ services:
     build: .
     image: comfyui
     restart: unless-stopped
+    command: ["python", "main.py", "--listen", "--lowvram"]
     ports:
       - "8188:8188"
     # environment:
@@ -10,7 +11,7 @@ services:
     volumes:
       - ./input:/app/input
       - ./output:/app/output
-      - ./models:/app/models
+      - ../models:/app/models
       - ./custom_nodes:/app/custom_nodes
     tty: true
     deploy:
