@@ -4,7 +4,7 @@ PyGithub
 matrix-client==0.4.0
 transformers
 huggingface-hub>0.20
-typer
+typer==0.9.0
 rich
 typing-extensions
 
@@ -50,8 +50,26 @@ cachetools
 yacs
 mediapipe
 svglib
-
+fvcore
+omegaconf
 imageio-ffmpeg
 librosa
 color-matcher
 huggingface_hub
+filelock
+ftfy
+trimesh[easy]
+albumentations
+scikit-learn
+
+# AnimateDiff
+pandas
+numexpr
+
+#MimicMotioin
+diffusers
+decord
+einops
+moviepy
+accelerate
+av

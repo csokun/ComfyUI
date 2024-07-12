@@ -12,6 +12,7 @@ services:
       - ./input:/app/input
       - ./output:/app/output
       - ../models:/app/models
+      - ../models/u2net:/root/.u2net
       - ./custom_nodes:/app/custom_nodes
     tty: true
     deploy:
