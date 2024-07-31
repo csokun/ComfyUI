@@ -73,3 +73,6 @@ einops
 moviepy
 accelerate
 av
+
+# LivePortrait
+pykalman
