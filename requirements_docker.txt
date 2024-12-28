@@ -76,3 +76,5 @@ av
 
 # LivePortrait
 pykalman
+
+webcolors
