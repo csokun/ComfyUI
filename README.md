@@ -38,10 +38,21 @@ This ui will let you design and execute advanced stable diffusion pipelines usin
 
 ## Features
 - Nodes/graph/flowchart interface to experiment and create complex Stable Diffusion workflows without needing to code anything.
-- Fully supports SD1.x, SD2.x, [SDXL](https://comfyanonymous.github.io/ComfyUI_examples/sdxl/), [Stable Video Diffusion](https://comfyanonymous.github.io/ComfyUI_examples/video/), [Stable Cascade](https://comfyanonymous.github.io/ComfyUI_examples/stable_cascade/), [SD3](https://comfyanonymous.github.io/ComfyUI_examples/sd3/) and [Stable Audio](https://comfyanonymous.github.io/ComfyUI_examples/audio/)
-- [LTX-Video](https://comfyanonymous.github.io/ComfyUI_examples/ltxv/)
-- [Flux](https://comfyanonymous.github.io/ComfyUI_examples/flux/)
-- [Mochi](https://comfyanonymous.github.io/ComfyUI_examples/mochi/)
+- Image Models
+   - SD1.x, SD2.x,
+   - [SDXL](https://comfyanonymous.github.io/ComfyUI_examples/sdxl/), [SDXL Turbo](https://comfyanonymous.github.io/ComfyUI_examples/sdturbo/)
+   - [Stable Cascade](https://comfyanonymous.github.io/ComfyUI_examples/stable_cascade/)
+   - [SD3 and SD3.5](https://comfyanonymous.github.io/ComfyUI_examples/sd3/)
+   - Pixart Alpha and Sigma
+   - [AuraFlow](https://comfyanonymous.github.io/ComfyUI_examples/aura_flow/)
+   - [HunyuanDiT](https://comfyanonymous.github.io/ComfyUI_examples/hunyuan_dit/)
+   - [Flux](https://comfyanonymous.github.io/ComfyUI_examples/flux/)
+- Video Models
+   - [Stable Video Diffusion](https://comfyanonymous.github.io/ComfyUI_examples/video/)
+   - [Mochi](https://comfyanonymous.github.io/ComfyUI_examples/mochi/)
+   - [LTX-Video](https://comfyanonymous.github.io/ComfyUI_examples/ltxv/)
+   - [Hunyuan Video](https://comfyanonymous.github.io/ComfyUI_examples/hunyuan_video/)
+- [Stable Audio](https://comfyanonymous.github.io/ComfyUI_examples/audio/)
 - Asynchronous Queue system
 - Many optimizations: Only re-executes the parts of the workflow that changes between executions.
 - Smart memory management: can automatically run models on GPUs with as low as 1GB vram.
@@ -61,9 +72,6 @@ This ui will let you design and execute advanced stable diffusion pipelines usin
 - [GLIGEN](https://comfyanonymous.github.io/ComfyUI_examples/gligen/)
 - [Model Merging](https://comfyanonymous.github.io/ComfyUI_examples/model_merging/)
 - [LCM models and Loras](https://comfyanonymous.github.io/ComfyUI_examples/lcm/)
-- [SDXL Turbo](https://comfyanonymous.github.io/ComfyUI_examples/sdturbo/)
-- [AuraFlow](https://comfyanonymous.github.io/ComfyUI_examples/aura_flow/)
-- [HunyuanDiT](https://comfyanonymous.github.io/ComfyUI_examples/hunyuan_dit/)
 - Latent previews with [TAESD](#how-to-show-high-quality-previews)
 - Starts up very fast.
 - Works fully offline: will never download anything.
@@ -181,7 +189,7 @@ Nvidia users should install stable pytorch using this command:
 
 This is the command to install pytorch nightly instead which might have performance improvements:
 
-```pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu124```
+```pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu126```
 
 #### Troubleshooting
 
@@ -215,6 +223,16 @@ You can install ComfyUI in Apple Mac silicon (M1 or M2) with any recent macOS ve
 #### DirectML (AMD Cards on Windows)
 
 ```pip install torch-directml``` Then you can launch ComfyUI with: ```python main.py --directml```
+
+#### Ascend NPUs
+
+For models compatible with Ascend Extension for PyTorch (torch_npu). To get started, ensure your environment meets the prerequisites outlined on the [installation](https://ascend.github.io/docs/sources/ascend/quick_install.html) page. Here's a step-by-step guide tailored to your platform and installation method:
+
+1. Begin by installing the recommended or newer kernel version for Linux as specified in the Installation page of torch-npu, if necessary.
+2. Proceed with the installation of Ascend Basekit, which includes the driver, firmware, and CANN, following the instructions provided for your specific platform.
+3. Next, install the necessary packages for torch-npu by adhering to the platform-specific instructions on the [Installation](https://ascend.github.io/docs/sources/pytorch/install.html#pytorch) page.
+4. Finally, adhere to the [ComfyUI manual installation](#manual-install-windows-linux) guide for Linux. Once all components are installed, you can run ComfyUI as described earlier.
+
 
 # Running
 

@@ -65,7 +65,7 @@ class CLIPTextEncode(ComfyNodeABC):
     def encode(self, clip, text):
         tokens = clip.tokenize(text)
         return (clip.encode_from_tokens_scheduled(tokens), )
-        
+
 
 class ConditioningCombine:
     @classmethod
@@ -293,17 +293,29 @@ class VAEDecodeTiled:
         return {"required": {"samples": ("LATENT", ), "vae": ("VAE", ),
                              "tile_size": ("INT", {"default": 512, "min": 64, "max": 4096, "step": 32}),
                              "overlap": ("INT", {"default": 64, "min": 0, "max": 4096, "step": 32}),
+                             "temporal_size": ("INT", {"default": 64, "min": 8, "max": 4096, "step": 4, "tooltip": "Only used for video VAEs: Amount of frames to decode at a time."}),
+                             "temporal_overlap": ("INT", {"default": 8, "min": 4, "max": 4096, "step": 4, "tooltip": "Only used for video VAEs: Amount of frames to overlap."}),
                             }}
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "decode"
 
     CATEGORY = "_for_testing"
 
-    def decode(self, vae, samples, tile_size, overlap=64):
+    def decode(self, vae, samples, tile_size, overlap=64, temporal_size=64, temporal_overlap=8):
         if tile_size < overlap * 4:
             overlap = tile_size // 4
+        if temporal_size < temporal_overlap * 2:
+            temporal_overlap = temporal_overlap // 2
+        temporal_compression = vae.temporal_compression_decode()
+        if temporal_compression is not None:
+            temporal_size = max(2, temporal_size // temporal_compression)
+            temporal_overlap = min(1, temporal_size // 2, temporal_overlap // temporal_compression)
+        else:
+            temporal_size = None
+            temporal_overlap = None
+
         compression = vae.spacial_compression_decode()
-        images = vae.decode_tiled(samples["samples"], tile_x=tile_size // compression, tile_y=tile_size // compression, overlap=overlap // compression)
+        images = vae.decode_tiled(samples["samples"], tile_x=tile_size // compression, tile_y=tile_size // compression, overlap=overlap // compression, tile_t=temporal_size, overlap_t=temporal_overlap)
         if len(images.shape) == 5: #Combine batches
             images = images.reshape(-1, images.shape[-3], images.shape[-2], images.shape[-1])
         return (images, )
@@ -327,15 +339,17 @@ class VAEEncodeTiled:
         return {"required": {"pixels": ("IMAGE", ), "vae": ("VAE", ),
                              "tile_size": ("INT", {"default": 512, "min": 64, "max": 4096, "step": 64}),
                              "overlap": ("INT", {"default": 64, "min": 0, "max": 4096, "step": 32}),
+                             "temporal_size": ("INT", {"default": 64, "min": 8, "max": 4096, "step": 4, "tooltip": "Only used for video VAEs: Amount of frames to encode at a time."}),
+                             "temporal_overlap": ("INT", {"default": 8, "min": 4, "max": 4096, "step": 4, "tooltip": "Only used for video VAEs: Amount of frames to overlap."}),
                             }}
     RETURN_TYPES = ("LATENT",)
     FUNCTION = "encode"
 
     CATEGORY = "_for_testing"
 
-    def encode(self, vae, pixels, tile_size, overlap):
-        t = vae.encode_tiled(pixels[:,:,:,:3], tile_x=tile_size, tile_y=tile_size, overlap=overlap)
-        return ({"samples":t}, )
+    def encode(self, vae, pixels, tile_size, overlap, temporal_size=64, temporal_overlap=8):
+        t = vae.encode_tiled(pixels[:,:,:,:3], tile_x=tile_size, tile_y=tile_size, overlap=overlap, tile_t=temporal_size, overlap_t=temporal_overlap)
+        return ({"samples": t}, )
 
 class VAEEncodeForInpaint:
     @classmethod
@@ -627,7 +641,7 @@ class LoraLoader:
                 "strength_clip": ("FLOAT", {"default": 1.0, "min": -100.0, "max": 100.0, "step": 0.01, "tooltip": "How strongly to modify the CLIP model. This value can be negative."}),
             }
         }
-    
+
     RETURN_TYPES = ("MODEL", "CLIP")
     OUTPUT_TOOLTIPS = ("The modified diffusion model.", "The modified CLIP model.")
     FUNCTION = "load_lora"
@@ -1197,7 +1211,7 @@ class LatentFromBatch:
         else:
             s["batch_index"] = samples["batch_index"][batch_index:batch_index + length]
         return (s,)
-    
+
 class RepeatLatentBatch:
     @classmethod
     def INPUT_TYPES(s):
@@ -1212,7 +1226,7 @@ class RepeatLatentBatch:
     def repeat(self, samples, amount):
         s = samples.copy()
         s_in = samples["samples"]
-        
+
         s["samples"] = s_in.repeat((amount, 1,1,1))
         if "noise_mask" in samples and samples["noise_mask"].shape[0] > 1:
             masks = samples["noise_mask"]
@@ -1622,15 +1636,15 @@ class LoadImage:
     FUNCTION = "load_image"
     def load_image(self, image):
         image_path = folder_paths.get_annotated_filepath(image)
-        
+
         img = node_helpers.pillow(Image.open, image_path)
-        
+
         output_images = []
         output_masks = []
         w, h = None, None
 
         excluded_formats = ['MPO']
-        
+
         for i in ImageSequence.Iterator(img):
             i = node_helpers.pillow(ImageOps.exif_transpose, i)
 
@@ -1641,10 +1655,10 @@ class LoadImage:
             if len(output_images) == 0:
                 w = image.size[0]
                 h = image.size[1]
-            
+
             if image.size[0] != w or image.size[1] != h:
                 continue
-            
+
             image = np.array(image).astype(np.float32) / 255.0
             image = torch.from_numpy(image)[None,]
             if 'A' in i.getbands():
@@ -2220,5 +2234,5 @@ def init_extra_nodes(init_custom_nodes=True):
         else:
             logging.warning("Please do a: pip install -r requirements.txt")
         logging.warning("")
-    
+
     return import_failed
