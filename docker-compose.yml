@@ -2,7 +2,7 @@ services:
   app:
     build: .
     image: comfyui
-    restart: unless-stopped
+    restart: on-failure
     command: ["python", "main.py", "--listen", "--lowvram"]
     ports:
       - "8188:8188"
