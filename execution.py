@@ -93,7 +93,7 @@ def get_input_data(inputs, class_def, unique_id, outputs=None, dynprompt=None, e
     missing_keys = {}
     for x in inputs:
         input_data = inputs[x]
-        input_type, input_category, input_info = get_input_info(class_def, x)
+        input_type, input_category, input_info = get_input_info(class_def, x, valid_inputs)
         def mark_missing():
             missing_keys[x] = True
             input_data_all[x] = (None,)
@@ -138,11 +138,11 @@ def _map_node_over_list(obj, input_data_all, func, allow_interrupt=False, execut
         max_len_input = 0
     else:
         max_len_input = max(len(x) for x in input_data_all.values())
-     
+
     # get a slice of inputs, repeat last input when list isn't long enough
     def slice_dict(d, i):
         return {k: v[i if len(v) > i else -1] for k, v in d.items()}
-    
+
     results = []
     def process_inputs(inputs, index=None, input_is_list=False):
         if allow_interrupt:
@@ -196,7 +196,6 @@ def merge_result_data(results, obj):
     return output
 
 def get_output_data(obj, input_data_all, execution_block_cb=None, pre_execute_cb=None):
-    
     results = []
     uis = []
     subgraph_results = []
@@ -226,7 +225,7 @@ def get_output_data(obj, input_data_all, execution_block_cb=None, pre_execute_cb
                 r = tuple([r] * len(obj.RETURN_TYPES))
             results.append(r)
             subgraph_results.append((None, r))
-    
+
     if has_subgraph:
         output = subgraph_results
     elif len(results) > 0:
@@ -556,7 +555,7 @@ def validate_inputs(prompt, item, validated):
     received_types = {}
 
     for x in valid_inputs:
-        type_input, input_category, extra_info = get_input_info(obj_class, x)
+        type_input, input_category, extra_info = get_input_info(obj_class, x, class_inputs)
         assert extra_info is not None
         if x not in inputs:
             if input_category == "required":
