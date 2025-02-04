@@ -63,6 +63,8 @@ class CLIPTextEncode(ComfyNodeABC):
     DESCRIPTION = "Encodes a text prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images."
 
     def encode(self, clip, text):
+        if clip is None:
+            raise RuntimeError("ERROR: clip input is invalid: None\n\nIf the clip is from a checkpoint loader node your checkpoint does not contain a valid clip or text encoder model.")
         tokens = clip.tokenize(text)
         return (clip.encode_from_tokens_scheduled(tokens), )
 
@@ -912,7 +914,7 @@ class CLIPLoader:
     @classmethod
     def INPUT_TYPES(s):
         return {"required": { "clip_name": (folder_paths.get_filename_list("text_encoders"), ),
-                              "type": (["stable_diffusion", "stable_cascade", "sd3", "stable_audio", "mochi", "ltxv", "pixart"], ),
+                              "type": (["stable_diffusion", "stable_cascade", "sd3", "stable_audio", "mochi", "ltxv", "pixart", "cosmos"], ),
                               },
                 "optional": {
                               "device": (["default", "cpu"], {"advanced": True}),
@@ -922,7 +924,7 @@ class CLIPLoader:
 
     CATEGORY = "advanced/loaders"
 
-    DESCRIPTION = "[Recipes]\n\nstable_diffusion: clip-l\nstable_cascade: clip-g\nsd3: t5 / clip-g / clip-l\nstable_audio: t5\nmochi: t5"
+    DESCRIPTION = "[Recipes]\n\nstable_diffusion: clip-l\nstable_cascade: clip-g\nsd3: t5 / clip-g / clip-l\nstable_audio: t5\nmochi: t5\ncosmos: old t5 xxl"
 
     def load_clip(self, clip_name, type="stable_diffusion", device="default"):
         if type == "stable_cascade":
@@ -937,6 +939,8 @@ class CLIPLoader:
             clip_type = comfy.sd.CLIPType.LTXV
         elif type == "pixart":
             clip_type = comfy.sd.CLIPType.PIXART
+        elif type == "cosmos":
+            clip_type = comfy.sd.CLIPType.COSMOS
         else:
             clip_type = comfy.sd.CLIPType.STABLE_DIFFUSION
 
@@ -2225,6 +2229,7 @@ def init_builtin_extra_nodes():
         "nodes_lt.py",
         "nodes_hooks.py",
         "nodes_load_3d.py",
+        "nodes_cosmos.py",
     ]
 
     import_failed = []
