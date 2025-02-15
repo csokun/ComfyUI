@@ -82,3 +82,5 @@ fairscale==0.4.4
 pycocoevalcap
 clip-interrogator
 open-clip-torch
+
+attrdict

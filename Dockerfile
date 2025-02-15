@@ -30,6 +30,11 @@ RUN --mount=type=cache,target=/root/.cache \
     pip uninstall -y onnxruntime onnxruntime-gpu && \
     pip install onnxruntime-gpu==1.18.1 --extra-index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/
 
+# Janus-pro
+RUN python3 -m pip install --upgrade pip
+RUN --mount=type=cache,target=/root/.cache \
+    pip install git+https://github.com/deepseek-ai/Janus.git
+
 COPY . .
 
 CMD ["python", "main.py", "--listen", "--lowvram"]
