@@ -15,6 +15,11 @@ RUN apt-get install -y libcudnn8
 
 RUN apt-get install libgl1-mesa-glx -y
 
+# Install under /root/.local
+ENV PIP_USER="true"
+ENV PIP_NO_WARN_SCRIPT_LOCATION=0
+ENV PIP_ROOT_USER_ACTION="ignore"
+
 RUN --mount=type=cache,target=/root/.cache \
     pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu126
 
