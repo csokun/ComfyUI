@@ -84,3 +84,4 @@ clip-interrogator
 open-clip-torch
 
 attrdict
+simpleeval
