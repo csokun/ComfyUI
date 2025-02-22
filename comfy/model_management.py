@@ -220,7 +220,7 @@ def is_amd():
 
 MIN_WEIGHT_MEMORY_RATIO = 0.4
 if is_nvidia():
-    MIN_WEIGHT_MEMORY_RATIO = 0.1
+    MIN_WEIGHT_MEMORY_RATIO = 0.0
 
 ENABLE_PYTORCH_ATTENTION = False
 if args.use_pytorch_cross_attention:
@@ -1021,8 +1021,6 @@ def is_directml_enabled():
     return False
 
 def should_use_fp16(device=None, model_params=0, prioritize_performance=True, manual_cast=False):
-    global directml_enabled
-
     if device is not None:
         if is_device_cpu(device):
             return False
@@ -1033,8 +1031,8 @@ def should_use_fp16(device=None, model_params=0, prioritize_performance=True, ma
     if FORCE_FP32:
         return False
 
-    if directml_enabled:
-        return False
+    if is_directml_enabled():
+        return True
 
     if (device is not None and is_device_mps(device)) or mps_mode():
         return True
