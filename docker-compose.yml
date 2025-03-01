@@ -3,7 +3,7 @@ services:
     build: .
     image: comfyui
     restart: on-failure
-    command: ["python", "main.py", "--listen", "--lowvram"]
+    command: ["python", "main.py", "--listen", "--lowvram", "--cpu-vae"]
     ports:
       - "8188:8188"
     # environment:
