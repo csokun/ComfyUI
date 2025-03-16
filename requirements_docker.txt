@@ -7,6 +7,9 @@ huggingface-hub>0.20
 typer==0.9.0
 rich
 typing-extensions
+toml
+uv
+chardet
 
 # Impact Pack
 piexif
@@ -85,3 +88,8 @@ open-clip-torch
 
 attrdict
 simpleeval
+
+# ComfyUI-KJNodes
+mss
+
+flash-attn
