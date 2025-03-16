@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.6.3-base-ubuntu22.04
+FROM nvidia/cuda:12.6.3-devel-ubuntu22.04
 ENV DEBIAN_FRONTEND noninteractive
 ENV CMDARGS --listen
 
@@ -39,6 +39,11 @@ RUN --mount=type=cache,target=/root/.cache \
 RUN python3 -m pip install --upgrade pip
 RUN --mount=type=cache,target=/root/.cache \
     pip install git+https://github.com/deepseek-ai/Janus.git
+
+RUN --mount=type=cache,target=/root/.cache \
+    pip install --upgrade packaging && \
+    pip install --upgrade pip setuptools wheel && \
+    pip install flash-attn
 
 COPY . .
 

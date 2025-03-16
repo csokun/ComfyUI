@@ -91,5 +91,3 @@ simpleeval
 
 # ComfyUI-KJNodes
 mss
-
-flash-attn
