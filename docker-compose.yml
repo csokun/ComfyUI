@@ -4,7 +4,7 @@ services:
     image: comfyui
     restart: on-failure
     command:
-      ["python", "main.py", "--listen", "--normalvram", "--use-flash-attention"]
+      ["python", "main.py", "--listen", "--lowvram", "--use-flash-attention"]
     ports:
       - "8188:8188"
     # environment:
