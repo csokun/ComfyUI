@@ -21,7 +21,7 @@ ENV PIP_NO_WARN_SCRIPT_LOCATION=0
 ENV PIP_ROOT_USER_ACTION="ignore"
 
 RUN --mount=type=cache,target=/root/.cache \
-    pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
+    pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu128
 
 WORKDIR /app
 
